@@ -90,7 +90,6 @@ module ``about the stock example`` =
                 let openPrice = Double.Parse(getOpen splits)
                 let closePrice = Double.Parse(getClose splits)
                 let difference = abs(openPrice - closePrice)
-                printfn "Date: %s Open: %f, Close: %f, Diff: %f" (getDate splits) openPrice closePrice difference
 
                 (x, difference)
 
