@@ -27,6 +27,7 @@ open FSharpKoans.Core
 //---------------------------------------------------------------
 [<Koan(Sort = 15)>]
 module ``about the stock example`` =
+    open System
     
     let stockData =
         [ "Date,Open,High,Low,Close,Volume,Adj Close";
@@ -58,8 +59,54 @@ module ``about the stock example`` =
     // tests for yourself along the way. You can also try 
     // using the F# Interactive window to check your progress.
 
+    type StockDay = {
+        date: string
+        openPrice: float
+        high: float
+        low: float
+        closePrice: float
+        volume: int
+        adjClose: float
+    }
+
     [<Koan>]
     let YouGotTheAnswerCorrect() =
-        let result =  __
+        let result =
+
+            let splitCommas (x:string) =
+                x.Split([|','|])
+
+            let getOpen (dataPoints:string[]) =
+                dataPoints.[1]
+
+            let getClose (dataPoints:string[]) =
+                dataPoints.[4]
+
+            let getDate (dataPoints:string[]) =
+                dataPoints.[0]
+
+            let openCloseVariance (x:string) =
+                let splits = splitCommas x
+                let [| one; two; three; four |] = splitCommas x
+                let openPrice = Double.Parse(getOpen splits)
+                let closePrice = Double.Parse(getClose splits)
+                let difference = abs(openPrice - closePrice)
+                printfn "Date: %s Open: %f, Close: %f, Diff: %f" (getDate splits) openPrice closePrice difference
+
+                (x, difference)
+
+            let greaterVariance (x:string, y:string) =
+                let varX = openCloseVariance x
+                let varY = openCloseVariance y
+                if (snd varY > snd varX) then varY
+                else varX
+            
+            stockData
+            |> List.tail
+            |> List.reduce (fun day1 day2 ->
+                fst (greaterVariance(day1, day2))
+            )
+            |> splitCommas
+            |> getDate
         
         AssertEquality "2012-03-13" result
