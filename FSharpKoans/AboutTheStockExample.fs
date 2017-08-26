@@ -87,7 +87,6 @@ module ``about the stock example`` =
 
             let openCloseVariance (x:string) =
                 let splits = splitCommas x
-                let [| one; two; three; four |] = splitCommas x
                 let openPrice = Double.Parse(getOpen splits)
                 let closePrice = Double.Parse(getClose splits)
                 let difference = abs(openPrice - closePrice)
